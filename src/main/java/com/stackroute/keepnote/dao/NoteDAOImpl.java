@@ -1,7 +1,14 @@
 package com.stackroute.keepnote.dao;
 
 import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.stackroute.keepnote.exception.NoteNotFoundException;
 import com.stackroute.keepnote.model.Note;
 
@@ -15,6 +22,8 @@ import com.stackroute.keepnote.model.Note;
  * 					context.  
  * */
 
+@Repository
+@Transactional
 public class NoteDAOImpl implements NoteDAO {
 
 	/*
@@ -22,42 +31,65 @@ public class NoteDAOImpl implements NoteDAO {
 	 * constructor-based autowiring.
 	 */
 
-	public NoteDAOImpl(SessionFactory sessionFactory) {
+	private final SessionFactory sessionFactory;
 
+	@Autowired
+	public NoteDAOImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	/*
 	 * Create a new note
 	 */
-	
+
 	public boolean createNote(Note note) {
-		return false;
+		Session session = this.sessionFactory.getCurrentSession();
+		session.save(note);
+		session.flush();
+		return Boolean.TRUE;
 
 	}
 
 	/*
 	 * Remove an existing note
 	 */
-	
+
 	public boolean deleteNote(int noteId) {
-		return false;
+		boolean flag = Boolean.TRUE;
+		try {
+			Note note = this.getNoteById(noteId);
+			Session session = this.sessionFactory.getCurrentSession();
+			session.clear();
+			session.delete(note);
+			session.flush();
+		} catch (NoteNotFoundException e) {
+			flag = Boolean.FALSE;
+		}
+		return flag;
 	}
 
 	/*
 	 * Retrieve details of all notes by userId
 	 */
-	
+
 	public List<Note> getAllNotesByUserId(String userId) {
-		return null;
+		final String hql = "FROM Note note where createdBy =  :userId";
+		return this.sessionFactory.getCurrentSession().createQuery(hql).getResultList();
 
 	}
 
 	/*
 	 * Retrieve details of a specific note
 	 */
-	
+
 	public Note getNoteById(int noteId) throws NoteNotFoundException {
-		return null;
+		Session session = this.sessionFactory.getCurrentSession();
+		Note note = session.get(Note.class, noteId);
+		session.flush();
+		if (null == note) {
+			throw new NoteNotFoundException("note not found exception");
+		}
+		return note;
 
 	}
 
