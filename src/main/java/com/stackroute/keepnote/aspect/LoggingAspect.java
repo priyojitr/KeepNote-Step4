@@ -8,8 +8,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /* Annotate this class with @Aspect and @Component */
@@ -23,33 +21,30 @@ public class LoggingAspect {
 	 * will have all the four aspectJ annotation
 	 * (@Before, @After, @AfterReturning, @AfterThrowing).
 	 */
-	
-	private static final Logger log=LoggerFactory.getLogger(LoggingAspect.class);
-	
-	private static final String LOG_LITERAL = "{} -- {}";
-	
-	@Pointcut(value="execution(* com.stackroute.keepnote.controller.*.*(..))")
+
+	@Pointcut("execution(* com.stackroute.keepnote.controller.*.*(..))")
 	private void logingDetails() {
-		//empty method block for point cut
+		// empty method block for point cut
 	}
-	
-	@Before(value="logingDetails")
+
+	@Before(value = "logingDetails()")
 	public void beforeLog() {
-		log.info(LOG_LITERAL,this.getClass().getEnclosingMethod().getName(),LocalDateTime.now());
+		System.out.println(this.getClass().getEnclosingMethod() + " -- " + LocalDateTime.now());
+
 	}
-	
-	@After(value="logingDetails")
+
+	@After(value = "logingDetails()")
 	public void afterLog() {
-		log.info(LOG_LITERAL,this.getClass().getEnclosingMethod().getName(),LocalDateTime.now());
+		System.out.println(this.getClass().getEnclosingMethod() + " -- " + LocalDateTime.now());
 	}
-	
-	@AfterThrowing(value="logingDetails")
+
+	@AfterThrowing(value = "logingDetails()")
 	public void afterThrowLog() {
-		log.info(LOG_LITERAL,this.getClass().getEnclosingMethod().getName(),LocalDateTime.now());
+		System.out.println(this.getClass().getEnclosingMethod() + " -- " + LocalDateTime.now());
 	}
-	
-	@AfterReturning(value="logingDetails")
+
+	@AfterReturning(value = "logingDetails()")
 	public void afterReturnLog() {
-		log.info(LOG_LITERAL,this.getClass().getEnclosingMethod().getName(),LocalDateTime.now());
+		System.out.println(this.getClass().getEnclosingMethod() + " -- " + LocalDateTime.now());
 	}
 }

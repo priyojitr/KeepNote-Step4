@@ -74,7 +74,7 @@ public class NoteDAOImpl implements NoteDAO {
 
 	public List<Note> getAllNotesByUserId(String userId) {
 		final String hql = "FROM Note note where createdBy =  :userId";
-		return this.sessionFactory.getCurrentSession().createQuery(hql).getResultList();
+		return this.sessionFactory.getCurrentSession().createQuery(hql).setParameter("userId", userId).getResultList();
 
 	}
 
@@ -98,7 +98,18 @@ public class NoteDAOImpl implements NoteDAO {
 	 */
 
 	public boolean UpdateNote(Note note) {
-		return false;
+		boolean flag=Boolean.TRUE;
+		try {
+			if(null!=this.getNoteById(note.getNoteId())) {
+				Session session=this.sessionFactory.getCurrentSession();
+				session.clear();
+				session.update(note);
+				session.flush();
+			}
+		} catch (NoteNotFoundException e) {
+			flag=Boolean.FALSE;
+		}
+		return flag;
 
 	}
 

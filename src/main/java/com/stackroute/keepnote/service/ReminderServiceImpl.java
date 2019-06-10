@@ -59,7 +59,7 @@ public class ReminderServiceImpl implements ReminderService {
 		} else {
 			this.reminderDAO.updateReminder(reminder);
 		}
-		return this.getReminderById(id);
+		return reminder;
 	}
 
 	/* This method should be used to delete an existing reminder. */

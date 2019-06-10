@@ -112,7 +112,7 @@ public class NoteServiceImpl implements NoteService {
 			throws ReminderNotFoundException, NoteNotFoundException, CategoryNotFoundException {
 		Reminder reminder = note.getReminder();
 		Category category = note.getCategory();
-		Note oldNote = this.noteDAO.getNoteById(id);
+		Note oldNote = this.getNoteById(id);
 		try {
 			if (null == oldNote) {
 				throw new NoteNotFoundException(NOTE_EXP_MSG);
@@ -130,7 +130,7 @@ public class NoteServiceImpl implements NoteService {
 			throw new CategoryNotFoundException(CAT_EXP_MSG);
 		}
 		// return updated note from DAO
-		return this.noteDAO.getNoteById(id);
+		return note;
 
 	}
 

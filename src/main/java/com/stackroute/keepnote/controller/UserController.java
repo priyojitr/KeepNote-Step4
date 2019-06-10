@@ -155,6 +155,8 @@ public class UserController {
 				} else {
 					response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				}
+			} else {
+				response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 		} catch (UserNotFoundException e) {
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);

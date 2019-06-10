@@ -46,12 +46,13 @@ public class ApplicationContextConfig {
 	 * name 2. Database URL 3. UserName 4. Password
 	 */
 	private static final String HOST = System.getProperty("MYSQL_HOST", "localhost");
-	private static final String PORT = "3306";
-	private static final String DBNAME = System.getProperty("MYSQL_DATABASE");
+	private static final String PORT = ":3306";
+	private static final String DBNAME = System.getProperty("MYSQL_DATABASE", "keepnoteapp");
 	private static final String USERNAME = System.getProperty("MYSQL_USER", "root");
 	private static final String PASSWORD = System.getProperty("MYSQL_PASSWORD", "root");
-	private final String url = new StringBuilder().append("jdbc:mysql://").append(HOST).append(PORT).append(DBNAME)
-			.toString();
+
+	private final String url = new StringBuilder().append("jdbc:mysql://").append(HOST).append(PORT).append("/")
+			.append(DBNAME).append("?verifyServerCertificate=false&useSSL=false&requireSSL=false").toString();
 
 	/*
 	 * Use this configuration while submitting solution in hobbes and CI
@@ -66,6 +67,7 @@ public class ApplicationContextConfig {
 	public DataSource dataSource() {
 		BasicDataSource ds = new BasicDataSource();
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		System.out.println(this.url + " -- " + USERNAME + " -- " + PASSWORD);
 		ds.setUrl(url);
 		ds.setUsername(USERNAME);
 		ds.setPassword(PASSWORD);
@@ -94,8 +96,7 @@ public class ApplicationContextConfig {
 		LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
 		factoryBean.setDataSource(dataSource);
 		factoryBean.setHibernateProperties(hibernateProperties);
-		//factoryBean.setAnnotatedClasses(Category.class, Note.class, Reminder.class, User.class)
-		factoryBean.setAnnotatedPackages("com.stackroute.keepnote.model");
+		factoryBean.setAnnotatedClasses(Category.class, Note.class, Reminder.class, User.class);
 		return factoryBean;
 	}
 

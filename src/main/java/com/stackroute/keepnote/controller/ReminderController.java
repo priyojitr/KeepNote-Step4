@@ -78,7 +78,7 @@ public class ReminderController {
 		ResponseEntity<Object> response = null;
 		if (null != session && null != session.getAttribute(SESSION_ATTR)) {
 			if (this.reminderService.createReminder(reminder)) {
-				response = new ResponseEntity<>(HttpStatus.OK);
+				response = new ResponseEntity<>(HttpStatus.CREATED);
 			} else {
 				response = new ResponseEntity<>(HttpStatus.CONFLICT);
 			}

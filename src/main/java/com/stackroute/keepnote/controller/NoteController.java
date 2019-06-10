@@ -94,8 +94,12 @@ public class NoteController {
 	public ResponseEntity<Object> deleteNote(@PathVariable int id, HttpSession session) {
 		ResponseEntity<Object> response = null;
 		try {
-			if (null != session.getAttribute(SESSION_ATTR) && this.noteService.deleteNote(id)) {
-				response = new ResponseEntity<>(HttpStatus.OK);
+			if (null != session.getAttribute(SESSION_ATTR)) {
+				if (this.noteService.deleteNote(id)) {
+					response = new ResponseEntity<>(HttpStatus.OK);
+				} else {
+					response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
 			} else {
 				response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
@@ -132,6 +136,8 @@ public class NoteController {
 				} else {
 					response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 				}
+			} else {
+				response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 		} catch (ReminderNotFoundException | NoteNotFoundException | CategoryNotFoundException e) {
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);

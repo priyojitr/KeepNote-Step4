@@ -34,6 +34,8 @@ public class Note {
 	private String noteContent;
 	private String noteStatus;
 	private Date noteCreatedAt;
+	
+	@ManyToOne
 	private Category category;
 
 	@ManyToOne

@@ -105,7 +105,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 	 */
 	public List<Category> getAllCategoryByUserId(String userId) {
 		final String hql = "From Category category where categoryCreatedBy = :userId";
-		return this.sessionFactory.getCurrentSession().createQuery(hql).getResultList();
+		return this.sessionFactory.getCurrentSession().createQuery(hql).setParameter("userId", userId).getResultList();
 
 	}
 

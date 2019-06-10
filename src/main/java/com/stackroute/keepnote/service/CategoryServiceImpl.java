@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new CategoryNotFoundException("category not found exception");
 		}
 		// this will return update category from DAO
-		return this.categoryDAO.getCategoryById(id);
+		return category;
 
 	}
 

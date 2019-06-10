@@ -119,11 +119,14 @@ public class CategoryController {
 			HttpSession session) {
 		ResponseEntity<Object> response = null;
 		try {
-			if (null != session.getAttribute(SESSION_ATTR)
-					&& null != this.categoryService.updateCategory(category, id)) {
-				response = new ResponseEntity<>(HttpStatus.OK);
+			if (null != session.getAttribute(SESSION_ATTR)) {
+				if (null != this.categoryService.updateCategory(category, id)) {
+					response = new ResponseEntity<>(HttpStatus.OK);
+				} else {
+					response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
 			} else {
-				response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 		} catch (CategoryNotFoundException e) {
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
